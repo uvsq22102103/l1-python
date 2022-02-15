@@ -35,6 +35,7 @@ old_config = []
 #########################
 
 def oval_canvas(x,y,rayon=7,couleur='blue'):
+    global liste_canvas
     liste_canvas = canvas.create_oval(x-rayon,y-rayon,x+rayon,y+rayon,fill=couleur)
 
 def generation():
@@ -66,8 +67,14 @@ def cycle():
     global config_courante,old_config
     #Un calcul sur la matrice qui suis le raisonnement d'un tas de sable.
     old_config = config_courante
+    for x in range(GRILLE):
+        for y in range(GRILLE):
+            if x == 0 or x == GRILLE-1:
+                pass
+            elif y == 0 or y == GRILLE-1:
+                pass
+            else:
 
-    pass
 
 def affichage_valeurs():
     global config_courante
