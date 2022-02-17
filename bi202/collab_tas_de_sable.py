@@ -49,6 +49,7 @@ def generation():
     old_config = []
     fin_avalanche = False
     compteur_cycles = 0
+    compteur.set(compteur_cycles)
     for i in range(GRILLE):
         config_courante.append([])
         for j in range(GRILLE):
@@ -167,6 +168,7 @@ def avalanche():
     while config_courante != old_config and fin_avalanche is False:
         cycle()
         actualisation()
+        compteur.set(compteur_cycles)
         root.update()
         compteur_cycles += 1
         time.sleep(0.1)
@@ -188,17 +190,22 @@ def fin_aval():
 ####################
 
 root = tk.Tk()
+
+compteur = tk.IntVar()
+
 root.title('Tas de Sable - Groupe 1')
 canvas = tk.Canvas(root,height=HAUTEUR,width=LARGEUR,bg='black')
 button_generation = tk.Button(root,text='Génération',command=generation,activebackground='red')
 button_avalanche = tk.Button(root,text='Avalanche',command=avalanche)
 button_affichage_valeurs = tk.Button(root,text='Valeurs',command=affichage_valeurs)
 button_stop = tk.Button(root,text='Stop',command=fin_aval)
+label_compteur = tk.Label(root,textvariable=compteur)
 
 button_generation.grid(row=0,column=0)
 button_avalanche.grid(row=1,column=0)
 button_affichage_valeurs.grid(row=2,column=0)
 button_stop.grid(row=3,column=0)
-canvas.grid(row=0,rowspan=4,column=1)
+label_compteur.grid(row=4,column=0)
+canvas.grid(row=0,rowspan=5,column=1)
 
 root.mainloop()
