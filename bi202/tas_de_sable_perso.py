@@ -33,7 +33,7 @@ old_config = []
 fin_avalanche = False
 compteur_cycles = 0
 scale_variable = 0
-grille = 21
+grille = int(input('\nChoisir la taille de la Grille:    '))
 espacement = HAUTEUR / grille
 
 #########################
@@ -43,7 +43,7 @@ espacement = HAUTEUR / grille
 #Création d'un oval symbolisant un grain de sable qui prend pour entrée x et y tel que ce sont les coordonnés de son centre, modulation de la couleur et du rayon du cercle possible.
 def oval_canvas(x,y,rayon=7,couleur='blue'):
     global liste_canvas
-    liste_canvas.append(canvas.create_oval(x-rayon,y-rayon,x+rayon,y+rayon,fill=couleur,tags="grains"))
+    liste_canvas.append(canvas.create_rectangle(x-rayon+1,y-rayon+1,x+rayon+1,y+rayon+1,fill=couleur,tags="grains"))
 
 #Création d'une liste matrice contenant des valeurs randomisées comprises entre 0 et 9, cette liste est ensuite utilisée comme base pour construire le quadrillage affiché sur la canvas.
 def generation(event=0):
