@@ -21,8 +21,6 @@ import copy
 
 HAUTEUR = 800
 LARGEUR = 800
-GRILLE = 21
-ESPACEMENT = HAUTEUR / GRILLE
 BIG_GRAIN = 10000
 
 ##################################
@@ -34,6 +32,9 @@ config_courante = []
 old_config = []
 fin_avalanche = False
 compteur_cycles = 0
+scale_variable = 0
+grille = 21
+espacement = HAUTEUR / grille
 
 #########################
 #Définition des fonctions
@@ -54,32 +55,32 @@ def generation(event=0):
     fin_avalanche = True
     compteur_cycles = 0
     compteur.set(compteur_cycles)
-    for i in range(GRILLE):
+    for i in range(grille):
         config_courante.append([])
-        for j in range(GRILLE):
+        for j in range(grille):
             config_courante[i].append(rd.randint(0,9))
-    for x in range(GRILLE):
-        for y in range(GRILLE):
+    for x in range(grille):
+        for y in range(grille):
             if config_courante[x][y] == 0:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='gray',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='gray',rayon=espacement/2)
             elif config_courante[x][y] == 1:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#00ff7f',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#00ff7f',rayon=espacement/2)
             elif config_courante[x][y] == 2:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#79f8f8',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#79f8f8',rayon=espacement/2)
             elif config_courante[x][y] == 3:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#ff5e4d',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#ff5e4d',rayon=espacement/2)
             elif config_courante[x][y] == 4:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#c11be7',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#c11be7',rayon=espacement/2)
             elif config_courante[x][y] == 5:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#318ce7',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#318ce7',rayon=espacement/2)
             elif config_courante[x][y] == 6:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='yellow',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='yellow',rayon=espacement/2)
             elif config_courante[x][y] == 7:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#a83c71',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#a83c71',rayon=espacement/2)
             elif config_courante[x][y] == 8:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#9b1c3e',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#9b1c3e',rayon=espacement/2)
             else:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#810a0a',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#810a0a',rayon=espacement/2)
 
 
 def blank_pattern(event=0):
@@ -91,11 +92,11 @@ def blank_pattern(event=0):
     fin_avalanche = True
     compteur_cycles = 0
     compteur.set(compteur_cycles)
-    for x in range(GRILLE):
+    for x in range(grille):
         config_courante.append([])
-        for y in range(GRILLE):
+        for y in range(grille):
             config_courante[x].append(0)
-            oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='gray',rayon=ESPACEMENT/2)
+            oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='gray',rayon=espacement/2)
 
 
 def actualisation():
@@ -103,48 +104,48 @@ def actualisation():
     canvas.delete('all')
     global config_courante,liste_canvas
     liste_canvas = []
-    for x in range(GRILLE):
-        for y in range(GRILLE):
+    for x in range(grille):
+        for y in range(grille):
             if config_courante[x][y] == 0:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='gray',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='gray',rayon=espacement/2)
             elif config_courante[x][y] == 1:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#00ff7f',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#00ff7f',rayon=espacement/2)
             elif config_courante[x][y] == 2:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#79f8f8',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#79f8f8',rayon=espacement/2)
             elif config_courante[x][y] == 3:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#ff5e4d',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#ff5e4d',rayon=espacement/2)
             elif config_courante[x][y] == 4:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#c11be7',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#c11be7',rayon=espacement/2)
             elif config_courante[x][y] == 5:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#318ce7',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#318ce7',rayon=espacement/2)
             elif config_courante[x][y] == 6:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='yellow',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='yellow',rayon=espacement/2)
             elif config_courante[x][y] == 7:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#a83c71',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#a83c71',rayon=espacement/2)
             elif config_courante[x][y] == 8:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#9b1c3e',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#9b1c3e',rayon=espacement/2)
             else:
-                oval_canvas(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT,couleur='#810a0a',rayon=ESPACEMENT/2)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#810a0a',rayon=espacement/2)
 
 
 def cycle():
-    global config_courante,old_config
+    global config_courante,old_config,grille
     #Un calcul sur la matrice qui suis le raisonnement d'un tas de sable.
     old_config = copy.deepcopy(config_courante)
-    for x in range(GRILLE):
-        for y in range(GRILLE):
+    for x in range(grille):
+        for y in range(grille):
             if old_config[x][y] > 3:
-                if (x == 0 or x == GRILLE-1) and (y == 0 or y == GRILLE-1):
+                if (x == 0 or x == grille-1) and (y == 0 or y == grille-1):
                     #Voisinage à deux cases
                     if x == 0 and y == 0:
                         config_courante[x][y]-= 2
                         config_courante[x+1][y]+= 1
                         config_courante[x][y+1]+= 1
-                    elif x == GRILLE-1 and y == 0:
+                    elif x == grille-1 and y == 0:
                         config_courante[x][y]-= 2
                         config_courante[x-1][y]+= 1
                         config_courante[x][y+1]+= 1
-                    elif x == GRILLE-1 and y == GRILLE-1:
+                    elif x == grille-1 and y == grille-1:
                         config_courante[x][y]-= 2
                         config_courante[x-1][y]+= 1
                         config_courante[x][y-1]+= 1
@@ -152,7 +153,7 @@ def cycle():
                         config_courante[x][y]-= 2
                         config_courante[x+1][y]+= 1
                         config_courante[x][y-1]+= 1
-                elif x == 0 or x == GRILLE-1:
+                elif x == 0 or x == grille-1:
                     #Voisinage à trois cases
                     if x == 0 :
                         config_courante[x][y]-= 3
@@ -164,7 +165,7 @@ def cycle():
                         config_courante[x-1][y]+= 1
                         config_courante[x][y+1]+= 1
                         config_courante[x][y-1]+= 1
-                elif y == 0 or y == GRILLE-1:
+                elif y == 0 or y == grille-1:
                     #Voisinage à trois cases
                     if y == 0:
                         config_courante[x][y]-= 3
@@ -201,9 +202,9 @@ def avalanche(event=0):
 
 def affichage_valeurs(event=0):
     global config_courante
-    for x in range(GRILLE):
-        for y in range(GRILLE):
-            canvas.create_text(ESPACEMENT / 2 + x * ESPACEMENT, ESPACEMENT / 2 + y*ESPACEMENT ,fill='white',text=config_courante[x][y])          
+    for x in range(grille):
+        for y in range(grille):
+            canvas.create_text(espacement / 2 + x * espacement, espacement / 2 + y*espacement ,fill='white',text=config_courante[x][y])          
 
 
 def fin_aval(event=0):
@@ -220,23 +221,23 @@ def infos(event=0):
 
 
 def on_click(event):
-    le_grain = event.widget.find_closest(event.x,event.y)[0]%(GRILLE**2)
+    le_grain = event.widget.find_closest(event.x,event.y)[0]%(grille**2)
     variable_calcul1 = 0
     variable_calcul2 = 0
     if event.widget.find_closest(event.x,event.y)[0] != 0 and le_grain == 0:
-        le_grain = GRILLE
-        variable_calcul1 = le_grain//GRILLE
-        variable_calcul2 = variable_calcul1 * GRILLE
+        le_grain = grille
+        variable_calcul1 = le_grain//grille
+        variable_calcul2 = variable_calcul1 * grille
         le_grain = le_grain-variable_calcul2-1
         if le_grain == -1:
-            le_grain = GRILLE-1
+            le_grain = grille-1
         res = [le_grain,le_grain]
     else:
-        variable_calcul1 = le_grain//GRILLE
-        variable_calcul2 = variable_calcul1 * GRILLE
+        variable_calcul1 = le_grain//grille
+        variable_calcul2 = variable_calcul1 * grille
         le_grain = le_grain-variable_calcul2-1
         if le_grain == -1:
-            le_grain = GRILLE-1
+            le_grain = grille-1
             variable_calcul1-= 1
         res = [variable_calcul1,le_grain]
     return(res)
@@ -261,7 +262,6 @@ def right_click_grain(event):
     if config_courante[coords[0]][coords[1]] > 0:
         config_courante[coords[0]][coords[1]] -= 1
     actualisation()
-
 
 ####################
 #Programme principal
