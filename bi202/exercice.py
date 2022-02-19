@@ -30,3 +30,4 @@ def charger(widg):
 
 root = tk.Tk()
 charger(root)
+root.mainloop()
