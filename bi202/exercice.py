@@ -2,7 +2,7 @@ import tkinter as tk
 import PIL as pil
 from PIL import Image
 from PIL import ImageTk 
-from tkinter import filedialog
+from tkinter import Button, filedialog
 from tkinter import simpledialog
 
 create=True
@@ -29,5 +29,7 @@ def charger(widg):
         canvas.pack()
 
 root = tk.Tk()
-charger(root)
+
+button = Button(root,text="Choose image",command=lambda:charger(root))
+button.pack()
 root.mainloop()
