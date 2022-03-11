@@ -17,7 +17,6 @@ from tkinter.filedialog import askopenfilename
 import random as rd
 import copy
 import os
-import time
 
 ##########################
 #Définition des constantes
@@ -26,7 +25,8 @@ import time
 HAUTEUR = 800
 LARGEUR = 800
 BIG_GRAIN = 10000
-DIREC = os.path.realpath(__file__)[0:-11]
+DIREC = os.path.realpath(__file__)[0:-21]
+COULEUR = ['#ffffff','#efe2e2','#e0c6c6','#d1aaaa','#c28e8d','#b27171','#a35555','#943938','#851d1c','#760100']
 
 ##################################
 #Définition des variables globales
@@ -319,6 +319,7 @@ def save():
             line += str(j)+';'
         sauvegarde.write(line+'\n')
     sauvegarde.close()
+    print('Sauvegarde effectuée !')
     root_save.destroy()
 
 
