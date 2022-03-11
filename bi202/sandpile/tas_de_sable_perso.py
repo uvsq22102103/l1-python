@@ -118,11 +118,13 @@ def gen_window(event=0):
     button_gen_pile_centree = tk.Button(root_gen,text='Pile centrée',command=lambda:generations(gen_type='pile centrée'))
     button_gen_blank = tk.Button(root_gen,text='Blank',command=generations)
     button_gen_max = tk.Button(root_gen,text='Max stable',command=lambda:generations(gen_type='max stable'))
+    button_gen_ecoulement = tk.Button(root_gen,text='Ecoulement',command=lambda:generations(gen_type='ecoulement'))
     entry_gen = tk.Entry(root_gen,textvariable=gen_window_grille)
     button_gen_random.grid()
     button_gen_pile_centree.grid(row=0,column=1)
     button_gen_blank.grid(row=0,column=2)
     button_gen_max.grid(row=1,column=0)
+    button_gen_ecoulement.grid(row=1,column=1)
     entry_gen.grid(row=2,column=1)
 
 
@@ -175,6 +177,11 @@ def generations(gen_type='blank'):
             config_courante.append([])
             for y in range(grille):
                 config_courante[x].append(3)
+    elif gen_type == 'ecoulement':
+        for i in range(grille):
+            config_courante.append([])
+            for j in range(grille):
+                config_courante[i].append(rd.randint(0,5))
     actualisation_initiale()
     root_gen.destroy()
     
