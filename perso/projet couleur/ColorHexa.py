@@ -4,6 +4,9 @@
 
 import tkinter as tk
 
+from pyparsing import col
+import ShowColors
+
 #################
 #Variables utiles
 #################
@@ -29,6 +32,7 @@ def button_pressed():
     texte += '\n\n'
     output_str.set(texte)
     button_copy.grid(row=4,column=2)
+    button_show.grid(row=4,column=0)
 
 def copy_to_clipboard():
     root.clipboard_clear()
@@ -91,6 +95,9 @@ def rgb_to_hexa(colors):
     print(liste)
     return(liste)
 
+def show_deg():
+    ShowColors.Show(copiable)
+
 ####################
 #Programme principal
 ####################
@@ -114,6 +121,7 @@ entry2 = tk.Entry(root,textvariable=entry2_var)
 entry3 = tk.Entry(root,textvariable=entry3_var)
 button = tk.Button(root,text='Process',command=button_pressed)
 button_copy = tk.Button(root,text='Copy',command=copy_to_clipboard)
+button_show = tk.Button(root,text='Show',command=show_deg)
 
 label.grid(row=0,column=1)
 label_sortie.grid(row=1,column=1)
