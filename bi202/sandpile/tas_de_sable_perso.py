@@ -26,7 +26,7 @@ HAUTEUR = 800
 LARGEUR = 800
 BIG_GRAIN = 10000
 DIREC = os.path.realpath(__file__)[0:-21]
-COULEUR = ['#ffffff','#efe2e2','#e0c6c6','#d1aaaa','#c28e8d','#b27171','#a35555','#943938','#851d1c','#760100']
+COULEUR = ['gray','blue','red','purple','yellow']
 
 ##################################
 #Définition des variables globales
@@ -63,25 +63,15 @@ def actualisation_initiale():
         liste_canvas.append([])
         for y in range(grille):
             if config_courante[x][y] == 0:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#ffffff',rayon=espacement/2,line=x)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur=COULEUR[0],rayon=espacement/2,line=x)
             elif config_courante[x][y] == 1:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#efe2e2',rayon=espacement/2,line=x)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur=COULEUR[1],rayon=espacement/2,line=x)
             elif config_courante[x][y] == 2:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#e0c6c6',rayon=espacement/2,line=x)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur=COULEUR[2],rayon=espacement/2,line=x)
             elif config_courante[x][y] == 3:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#d1aaaa',rayon=espacement/2,line=x)
-            elif config_courante[x][y] == 4:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#c28e8d',rayon=espacement/2,line=x)
-            elif config_courante[x][y] == 5:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#b27171',rayon=espacement/2,line=x)
-            elif config_courante[x][y] == 6:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#a35555',rayon=espacement/2,line=x)
-            elif config_courante[x][y] == 7:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#943938',rayon=espacement/2,line=x)
-            elif config_courante[x][y] == 8:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#851d1c',rayon=espacement/2,line=x)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur=COULEUR[3],rayon=espacement/2,line=x)
             else:
-                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur='#760100',rayon=espacement/2,line=x)
+                oval_canvas(espacement / 2 + x * espacement, espacement / 2 + y*espacement,couleur=COULEUR[4],rayon=espacement/2,line=x)
 
 
 def actualisation():
@@ -89,25 +79,15 @@ def actualisation():
     for x in range(grille):
         for y in range(grille):
             if config_courante[x][y] == 0:
-                update_color(objet = liste_canvas[x][y], color='#ffffff')
+                update_color(objet = liste_canvas[x][y], color=COULEUR[0])
             elif config_courante[x][y] == 1:
-                update_color(objet = liste_canvas[x][y], color='#efe2e2')
+                update_color(objet = liste_canvas[x][y], color=COULEUR[1])
             elif config_courante[x][y] == 2:
-                update_color(objet = liste_canvas[x][y], color='#e0c6c6')
+                update_color(objet = liste_canvas[x][y], color=COULEUR[2])
             elif config_courante[x][y] == 3:
-                update_color(objet = liste_canvas[x][y], color='#d1aaaa')
-            elif config_courante[x][y] == 4:
-                update_color(objet = liste_canvas[x][y], color='#c28e8d')
-            elif config_courante[x][y] == 5:
-                update_color(objet = liste_canvas[x][y], color='#b27171')
-            elif config_courante[x][y] == 6:
-                update_color(objet = liste_canvas[x][y], color='#a35555')
-            elif config_courante[x][y] == 7:
-                update_color(objet = liste_canvas[x][y], color='#943938')
-            elif config_courante[x][y] == 8:
-                update_color(objet = liste_canvas[x][y], color='#851d1c')
+                update_color(objet = liste_canvas[x][y], color=COULEUR[3])
             else:
-                update_color(objet = liste_canvas[x][y], color='#760100')
+                update_color(objet = liste_canvas[x][y], color=COULEUR[4])
 
 
 def gen_window(event=0):
@@ -196,42 +176,42 @@ def cycle():
                 if (x == 0 or x == grille-1) and (y == 0 or y == grille-1):
                     #Voisinage à deux cases
                     if x == 0 and y == 0:
-                        config_courante[x][y]-= 2
+                        config_courante[x][y]-= 4
                         config_courante[x+1][y]+= 1
                         config_courante[x][y+1]+= 1
                     elif x == grille-1 and y == 0:
-                        config_courante[x][y]-= 2
+                        config_courante[x][y]-= 4
                         config_courante[x-1][y]+= 1
                         config_courante[x][y+1]+= 1
                     elif x == grille-1 and y == grille-1:
-                        config_courante[x][y]-= 2
+                        config_courante[x][y]-= 4
                         config_courante[x-1][y]+= 1
                         config_courante[x][y-1]+= 1
                     else:
-                        config_courante[x][y]-= 2
+                        config_courante[x][y]-= 4
                         config_courante[x+1][y]+= 1
                         config_courante[x][y-1]+= 1
                 elif x == 0 or x == grille-1:
                     #Voisinage à trois cases
                     if x == 0 :
-                        config_courante[x][y]-= 3
+                        config_courante[x][y]-= 4
                         config_courante[x+1][y]+= 1
                         config_courante[x][y+1]+= 1
                         config_courante[x][y-1]+= 1
                     else:
-                        config_courante[x][y]-= 3
+                        config_courante[x][y]-= 4
                         config_courante[x-1][y]+= 1
                         config_courante[x][y+1]+= 1
                         config_courante[x][y-1]+= 1
                 elif y == 0 or y == grille-1:
                     #Voisinage à trois cases
                     if y == 0:
-                        config_courante[x][y]-= 3
+                        config_courante[x][y]-= 4
                         config_courante[x+1][y]+= 1
                         config_courante[x][y+1]+= 1
                         config_courante[x-1][y]+= 1
                     else:
-                        config_courante[x][y]-= 3
+                        config_courante[x][y]-= 4
                         config_courante[x+1][y]+= 1
                         config_courante[x-1][y]+= 1
                         config_courante[x][y-1]+= 1
