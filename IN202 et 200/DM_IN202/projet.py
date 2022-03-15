@@ -4,6 +4,7 @@ from PIL import ImageTk
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 import os
+import rotate_matrix as rm
 
 check = False
 
@@ -69,6 +70,19 @@ def qr_coin():
     return coin
 
 
+def mat_rotate(matrice, rotation):
+    '''Fonction qui prend en entrée une matrice puis la rotation désirée
+    et qui retourne la matrice retournée.'''
+    if rotation == 90:
+        matrice = rm.anti_clockwise(matrice)
+    elif rotation == 180:
+        matrice = rm.anti_clockwise(matrice)
+        matrice = rm.anti_clockwise(matrice)
+    elif rotation == -90:
+        matrice = rm.clockwise(matrice)
+    return(matrice)
+
+
 def dir_image():
     file_dir = askopenfilename(initialdir=os.path.realpath(__file__)[0:-9])
     return file_dir
@@ -108,12 +122,20 @@ def check_corner():
         print('\n'+affiche_mat(coin_ref)+'Référence\n\n')
         if coins[0] != coin_ref:
             print('UP Left corner should be the DOWN Right')
+            mat = mat_rotate(mat, 180)
+            print('Correction...')
         elif coins[1] != coin_ref:
             print('UP Right corner should be the DOWN Right')
+            mat = mat_rotate(mat, 90)
+            print('Correction...')
         elif coins[2] != coin_ref:
             print('DOWN Left corner should be the DOWN Right')
+            mat = mat_rotate(mat, -90)
+            print('Correction...')
         elif coins[3] != coin_ref:
             print('Le QR code est bien placé')
+        qr_label.set(affiche_mat(mat))
+        print('\nAnalyse parée\n')
     else:
         qr_label.set('Aucun QR code à checker')
 
@@ -128,7 +150,7 @@ root.geometry('500x500')
 qr_label = tk.StringVar()
 
 button_charger = tk.Button(root, text='Charger', command=load_image)
-button_check_corner = tk.Button(root,text='Check corner', command=check_corner)
+button_check_corner = tk.Button(root, text='Check corner', command=check_corner)
 label_qr = tk.Label(root, textvariable=qr_label)
 
 button_charger.pack(side=tk.BOTTOM)

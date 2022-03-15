@@ -125,7 +125,7 @@ def generation_initiale(event=0):
         for y in range(grille):
             config_courante[x].append(0)
     actualisation_initiale()
-    
+
 
 def generations(gen_type='blank'):
     canvas.delete('all')
