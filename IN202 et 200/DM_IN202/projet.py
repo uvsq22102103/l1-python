@@ -140,21 +140,33 @@ def check_corner():
         qr_label.set('Aucun QR code à checker')
 
 
+def check_line():
+    global mat
+    print('Recherche des lignes relatives au coins...')
+    line_sample = []
+    # line est de 11 de long et commence par un 0
+
+
+def check_qr():
+    check_corner()
+    # check_line()
+
+
 # Initialisation du GUI
 
 root = tk.Tk()
 root.title('QR Code')
-root.geometry('500x500')
+root.geometry('420x390')
 
 # Ajout de fonctionnalités
 qr_label = tk.StringVar()
 
-button_charger = tk.Button(root, text='Charger', command=load_image)
-button_check_corner = tk.Button(root, text='Check corner', command=check_corner)
+button_charger = tk.Button(root, text='Charger', command=load_image, bg='gray')
+button_check_qr = tk.Button(root, text='Check QR', command=check_qr, bg='gray')
 label_qr = tk.Label(root, textvariable=qr_label)
 
-button_charger.pack(side=tk.BOTTOM)
-button_check_corner.pack(side=tk.BOTTOM)
+button_charger.pack(side=tk.BOTTOM, ipadx=150, ipady=6)
+button_check_qr.pack(side=tk.BOTTOM, ipadx=70)
 label_qr.pack(pady=20)
 
 # Maintien de la fenêtre
