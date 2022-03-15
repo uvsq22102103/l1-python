@@ -7,6 +7,7 @@ import os
 
 check = False
 
+
 def nbrCol(matrice):
     return(len(matrice[0]))
 
@@ -46,31 +47,25 @@ def affiche_mat(matrice):
         label += '\n'
     return label
 
-#redefinir cette fonction
+
 def qr_coin():
     '''Cette fonction ne prend rien en argument et retourne un coin de QR code
     sous forme de matrice ! '''
     coin = []
-    size = 7
-    compteur = 0
-    while size >= 3:
-        if compteur == 1 or compteur == 3:
-            nombre = 1
-        else:
-            nombre = 0
-        for i in range(size):
-            if size == 7:
-                coin.append([])
-            else:
-                i += compteur
-            for j in range(size):
-                if size == 7:
-                    coin[i].append(nombre)
-                else:
-                    j += compteur
-                    coin[i][j] = nombre
-        size -= 2
-        compteur += 1
+    for i in range(7):
+        coin.append([])
+        for j in range(7):
+            coin[i].append(1)
+    for i in range(5):
+        i += 1
+        for j in range(5):
+            j += 1
+            coin[i][j] = 0
+    for i in range(3):
+        i += 2
+        for j in range(3):
+            j += 2
+            coin[i][j] = 1
     return coin
 
 
@@ -112,9 +107,15 @@ def check_corner():
         print('\n'+affiche_mat(coins[1])+'UP right corner')
         print('\n'+affiche_mat(coins[2])+'DOWN left corner')
         print('\n'+affiche_mat(coins[3])+'DOWN right corner')
-        print('\n'+affiche_mat(coin_ref)+'Référence')
-        if coins[0] == coin_ref:
-            print('cool')
+        print('\n'+affiche_mat(coin_ref)+'Référence\n\n')
+        if coins[0] != coin_ref:
+            print('UP Left corner should be the DOWN Right')
+        elif coins[1] != coin_ref:
+            print('UP Right corner should be the DOWN Right')
+        elif coins[2] != coin_ref:
+            print('DOWN Left corner should be the DOWN Right')
+        elif coins[3] != coin_ref:
+            print('Le QR code est bien placé')
     else:
         qr_label.set('Aucun QR code à checker')
 
