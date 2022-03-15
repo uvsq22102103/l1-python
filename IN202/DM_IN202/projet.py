@@ -89,18 +89,16 @@ def check_corner():
         coins = [[], [], [], []]
         for i in range(7):
             coins[0].append([])
+            coins[1].append([])
             for j in range(7):
                 coins[0][i].append(mat[i][j])
-        for i in range(7):
-            coins[1].append([])
             for j in range(18, 25):
                 coins[1][i].append(mat[i][j])
         for i in range(18, 25):
             coins[2].append([])
+            coins[3].append([])
             for j in range(7):
                 coins[2][i-18].append(mat[i][j])
-        for i in range(18, 25):
-            coins[3].append([])
             for j in range(18, 25):
                 coins[3][i-18].append(mat[i][j])
         print('\n'+affiche_mat(coins[0])+'UP left corner')
