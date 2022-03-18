@@ -4,10 +4,10 @@ from PIL import ImageTk
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 import os
-import rotate_matrix as rm
 
+reading = False
 check = False
-
+dir_frame = '/home/aymeric/Documents/uvsq-github/l1-python/IN202 et 200/DM_IN202/Exemples/frame.png'
 
 def nbrCol(matrice):
     return(len(matrice[0]))
@@ -36,16 +36,18 @@ def loading(filename):
     dimension_qr = toLoad.size[1], toLoad.size[0]
     for i in range(dimension_qr[0]):
         for j in range(dimension_qr[1]):
-            mat[i][j] = 1 if toLoad.getpixel((j,i)) == 0 else 0
+            mat[i][j] = 0 if toLoad.getpixel((j,i)) == 0 else 1
     return mat
 
 
 def affiche_mat(matrice):
     label = str()
+    compteur = 0
     for i in matrice:
+        if len(label) != 0:
+            label += '\n'
         for y in i:
             label += str(y)+' '
-        label += '\n'
     return label
 
 
@@ -56,17 +58,17 @@ def qr_coin():
     for i in range(7):
         coin.append([])
         for j in range(7):
-            coin[i].append(1)
+            coin[i].append(0)
     for i in range(5):
         i += 1
         for j in range(5):
             j += 1
-            coin[i][j] = 0
+            coin[i][j] = 1
     for i in range(3):
         i += 2
         for j in range(3):
             j += 2
-            coin[i][j] = 1
+            coin[i][j] = 0
     return coin
 
 
@@ -74,12 +76,13 @@ def mat_rotate(matrice, rotation):
     '''Fonction qui prend en entrée une matrice puis la rotation désirée
     et qui retourne la matrice retournée.'''
     if rotation == 90:
-        matrice = rm.anti_clockwise(matrice)
+        for i in range(3):
+            matrice = list(reversed(list(zip(*matrice))))
     elif rotation == 180:
-        matrice = rm.anti_clockwise(matrice)
-        matrice = rm.anti_clockwise(matrice)
+        for i in range(2):
+            matrice = list(reversed(list(zip(*matrice))))
     elif rotation == -90:
-        matrice = rm.clockwise(matrice)
+        matrice = list(reversed(list(zip(*matrice))))
     return(matrice)
 
 
@@ -135,35 +138,181 @@ def check_corner():
         elif coins[3] != coin_ref:
             print('Le QR code est bien placé')
         qr_label.set(affiche_mat(mat))
-        print('\nAnalyse parée\n')
     else:
         qr_label.set('Aucun QR code à checker')
 
 
 def check_line():
+    global mat,check,reading
+    if check:
+        erreur = False
+        if dir_frame == '':
+            print('Il faut localiser le QR frame.png')
+            qr_frame = loading(dir_image())
+        else:
+            qr_frame = loading(dir_frame)
+        print('QR Frame chargé')
+        for i in range(6,18):
+            if mat[6][i] != qr_frame[6][i]:
+                erreur = True
+            if mat[i][6] != qr_frame[i][6]:
+                erreur = True
+        if erreur:
+            print('Les lignes de coins du QR Code ne sont pas identifiées')
+            reading = True
+        else:
+            print('Les lignes de coins du QR Code sont identifiées')
+
+
+def hamming(bits):
+    '''Prend 7 bits en entrée et rend 4 bits de données
+    (C'est un code de correction d'erreur de Hamming).
+    L'inverse est également possible !'''
+    if len(bits) == 7 :
+        #definition des bits de vérification et de données
+        k1, k2, k4 = int(bits[-1]), int(bits[-2]), int(bits[-4])
+        m1, m2, m3, m4 = int(bits[-3]), int(bits[-5]), int(bits[-6]), int(bits[-7])
+        parité_1, parité_2, parité_4 = (m1+m2+m4)%2, (m1+m3+m4)%2, (m2+m3+m4)%2
+        if parité_1 != k1 and parité_2 != k2 and parité_4 != k4:
+            #erreur m4
+            if m4 == 0:
+                m4 = 1
+            else:
+                m4 = 0
+        elif parité_1 != k1 and parité_2 != k2 and parité_4 == k4:
+            #erreur m1
+            if m1 == 0:
+                m1 = 1
+            else:
+                m1 = 0
+        elif parité_1 != k1 and parité_2 == k2 and parité_4 != k4:
+            #erreur m2
+            if m2 == 0:
+                m2 = 1
+            else:
+                m2 = 0
+        elif parité_1 == k1 and parité_2 != k2 and parité_4 != k4:
+            #erreur m3
+            if m3 == 0:
+                m3 = 1
+            else:
+                m3 = 0
+        return(str(m4)+str(m3)+str(m2)+str(m1))
+    elif len(bits) == 4:
+        pass
+    else:
+        print('Input non valide')
+
+
+def sorting_qr():
+    '''Cette fonction lit une matrice de 25x25 représentant
+    un QR code correctement orienté afin de retourner
+    les blocs de lecture binaire associés'''
     global mat
-    print('Recherche des lignes relatives au coins...')
-    line_sample = []
-    # line est de 11 de long et commence par un 0
+    liste_binaire = []
+    blocs = []
+    size = 24
+    for zigzag in range(4):
+        zigzag += 1
+        liste_binaire.append([])
+        for i in range(14):
+            x = 24-i
+            for j in range(2):
+                y = size-j
+                liste_binaire[(zigzag*2)-2].append(mat[y][x])
+        size -= 2
+        liste_binaire.append([])
+        for i in range(14):
+            x = 11+i
+            for j in range(2):
+                y = size-j
+                liste_binaire[(zigzag*2)-1].append(mat[y][x])
+        size -= 2
+    for ligne in liste_binaire:
+        blocs.append(ligne[0:len(ligne)//2])
+        blocs.append(ligne[len(ligne)//2:len(ligne)])
+    return blocs
+
+
+def blocs_to_hamming(blocs):
+    output = []
+    for bloc in blocs:
+        part1, part2 = str(), str()
+        for i in range(len(bloc)//2):
+            part1 += str(bloc[i])
+        for i in range(len(bloc)//2, len(bloc)):
+            part2 += str(bloc[i])
+        part1, part2 = hamming(part1), hamming(part2)
+        output.append(part1+part2)
+    return output
+        
+
+def binary_to_ascii(binary:str):
+    '''Prend du binaire en argument (str) et retourne
+    le(s) character(s) ASCII utf-8 associé(s)'''
+    binary_int = int(binary, 2)
+    byte_number = binary_int.bit_length() + 7 // 8
+    binary_array = binary_int.to_bytes(byte_number, "big")
+    ascii_text = binary_array.decode()
+    return ascii_text
+
+
+def check_filter():
+    '''Identifie le type de filtre appliqué au QR Code
+    pour sa lisibilité puis retire de la matrice le filtre.
+    \nLe paramètre du filtre dépend de 2 bits de la matrice: 
+    (23,8) et (22,8). \n\nSi "00" : entièrement noire (pas de changement).
+    \nSi "01" : damier dont la case en haut à gauche est noire.
+    \nSi "10" des lignes horizontales alternées noires et blanches,
+    la plus haute étant noire.
+    \nSi "11 des lignes verticales alternées noires et blanches, 
+    la plus à gauche étant noire.'''
+    global mat
+    filtre = str(mat[23][8]) + str(mat[22][8])
+    if filtre == '01':
+        pass
+    elif filtre == '10':
+        pass
+    elif filtre == '11':
+        pass
 
 
 def check_qr():
-    check_corner()
-    # check_line()
+    if check:
+        check_corner()
+        check_line()
+        check_filter()
+        blocs = sorting_qr()
+        print('\nExtraction des blocs binaires du QR Code :\n')
+        for i in blocs:
+            print(i)
+        print("\nFin de l'extraction\n")
+        blocs = blocs_to_hamming(blocs)
+        if mat[24][8] == 1:
+            # ASCII
+            ascii_ = str()
+            for bloc in blocs:
+                ascii_ += binary_to_ascii(bloc)
+            print('Contenu du QR Code : ',ascii_)
+        else:
+            # Données numériques
+            pass
+    else:
+        qr_label.set('Aucun QR code à checker')
 
 
 # Initialisation du GUI
 
 root = tk.Tk()
 root.title('QR Code')
-root.geometry('420x390')
+root.geometry('420x490')
 
 # Ajout de fonctionnalités
 qr_label = tk.StringVar()
 
 button_charger = tk.Button(root, text='Charger', command=load_image, bg='gray')
-button_check_qr = tk.Button(root, text='Check QR', command=check_qr, bg='gray')
-label_qr = tk.Label(root, textvariable=qr_label)
+button_check_qr = tk.Button(root, text='Check & Process', command=check_qr, bg='gray')
+label_qr = tk.Label(root, textvariable=qr_label, bg='#bfbfbf')
 
 button_charger.pack(side=tk.BOTTOM, ipadx=150, ipady=6)
 button_check_qr.pack(side=tk.BOTTOM, ipadx=70)
