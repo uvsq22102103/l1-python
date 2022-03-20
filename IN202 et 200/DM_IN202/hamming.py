@@ -1,40 +1,38 @@
-def hamming(bits):
-    '''Prend 7 bits en entrée et rend 4 bits de données
-    (C'est un code de correction d'erreur de Hamming).
-    L'inverse est également possible !'''
-    if len(bits) == 7 :
-        #definition des bits de vérification et de données
-        k1, k2, k4 = int(bits[-1]), int(bits[-2]), int(bits[-4])
-        m1, m2, m3, m4 = int(bits[-3]), int(bits[-5]), int(bits[-6]), int(bits[-7])
-        parité_1, parité_2, parité_4 = (m1+m2+m4)%2, (m1+m3+m4)%2, (m2+m3+m4)%2
-        if parité_1 != k1 and parité_2 != k2 and parité_4 != k4:
-            #erreur m4
-            if m4 == 0:
-                m4 = 1
-            else:
-                m4 = 0
-        elif parité_1 != k1 and parité_2 != k2 and parité_4 == k4:
-            #erreur m1
-            if m1 == 0:
-                m1 = 1
-            else:
-                m1 = 0
-        elif parité_1 != k1 and parité_2 == k2 and parité_4 != k4:
-            #erreur m2
-            if m2 == 0:
-                m2 = 1
-            else:
-                m2 = 0
-        elif parité_1 == k1 and parité_2 != k2 and parité_4 != k4:
-            #erreur m3
-            if m3 == 0:
-                m3 = 1
-            else:
-                m3 = 0
-        return(str(m4)+str(m3)+str(m2)+str(m1))
-    elif len(bits) == 4:
-        pass
-    else:
-        print('Input non valide')
+def parité(bits:list, indices:list):
+    out = 0
+    for bit in indices:
+        out += bits[bit]
+    return out % 2
 
-print(hamming('1001101'))
+
+def hamming(bits:list):
+    c1, c2, c3 = parité(bits,[0,1,3]), parité(bits,[0,2,3]), parité(bits,[2,1,3])
+    return [c1,c2,bits[0],c3,bits[1],bits[2],bits[3]]
+
+
+def reverse_hamming(bits:list):
+    c1, c2, c3 = parité(bits,[0,1,4]), parité(bits,[0,2,4]), parité(bits,[2,1,4])
+    k1, k2, k3 = bits[0], bits[1], bits[3]
+    if c1 != k1 and c2 != k2 and c3 == k3:
+        bits[0] = 0 if bits[0] == 1 else 1
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 != k1 and c2 == k2 and c3 != k3:
+        bits[1] = 0 if bits[1] == 1 else 1
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 == k1 and c2 != k2 and c3 != k3:
+        bits[2] = 0 if bits[2] == 1 else 1
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 != k1 and c2 != k2 and c3 != k3:
+        bits[4] = 0 if bits[4] == 1 else 1
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 == k1 and c2 == k2 and c3 == k3:
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 != k1 and c2 == k2 and c3 == k3:
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 == k1 and c2 != k2 and c3 == k3:
+        return [bits[0], bits[1], bits[2], bits[4]]
+    elif c1 == k1 and c2 == k2 and c3 != k3:
+        return [bits[0], bits[1], bits[2], bits[4]]
+
+print(hamming([1,1,0,0]))
+print(reverse_hamming([0,1,1,1,1,0,0]))
