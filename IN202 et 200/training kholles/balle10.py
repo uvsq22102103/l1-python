@@ -26,6 +26,28 @@ def mouvement():
     """Déplace la balle et ré-appelle la fonction avec un compte-à-rebours"""
     rebond()
     canvas.move(balle[0], balle[1], balle[2])
+    balle_coords = canvas.coords(balle[0])
+    balle_coords = balle_coords[0]+20,balle_coords[1]+20
+    objet = canvas.coords(rectangle[0])
+    zone = canvas.find_overlapping(objet[0],objet[1],objet[2],objet[3])
+    for obj in zone:
+        if obj == balle[0]:
+            canvas.itemconfigure(balle[0],fill='white')
+    objet = canvas.coords(rectangle[1])
+    zone = canvas.find_overlapping(objet[0],objet[1],objet[2],objet[3])
+    for obj in zone:
+        if obj == balle[0]:
+            canvas.itemconfigure(balle[0],fill='red')
+    objet = canvas.coords(rectangle[2])
+    zone = canvas.find_overlapping(objet[0],objet[1],objet[2],objet[3])
+    for obj in zone:
+        if obj == balle[0]:
+            canvas.itemconfigure(balle[0],fill='red')
+    objet = canvas.coords(rectangle[3])
+    zone = canvas.find_overlapping(objet[0],objet[1],objet[2],objet[3])
+    for obj in zone:
+        if obj == balle[0]:
+            canvas.itemconfigure(balle[0],fill='white')
     canvas.after(20, mouvement)
 
 
@@ -40,12 +62,13 @@ def rebond():
 
 
 def clic(event):
-    global balle
+    global balle, rectangle
     j = event.x,event.y
-    canvas.create_rectangle(0,0,j[0],j[1],fill='red')
-    canvas.create_rectangle(LARGEUR,0,j[0],j[1],fill='white')
-    canvas.create_rectangle(0,HAUTEUR,j[0],j[1],fill='white')
-    canvas.create_rectangle(LARGEUR,HAUTEUR,j[0],j[1],fill='red')
+    rectangle = []
+    rectangle.append(canvas.create_rectangle(0,0,j[0],j[1],fill='red'))
+    rectangle.append(canvas.create_rectangle(LARGEUR,0,j[0],j[1],fill='white'))
+    rectangle.append(canvas.create_rectangle(0,HAUTEUR,j[0],j[1],fill='white'))
+    rectangle.append(canvas.create_rectangle(LARGEUR,HAUTEUR,j[0],j[1],fill='red'))
     # initialisation de la balle
     balle = creer_balle()
     # déplacement de la balle
