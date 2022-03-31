@@ -1,4 +1,3 @@
-from asyncore import compact_traceback
 import tkinter as tk
 
 ##################
@@ -15,7 +14,7 @@ compteur = 0
 def creer_balle():
     """Dessine un disque bleu et retourne son identifiant
      et les valeurs de déplacements dans une liste"""
-    x, y = LARGEUR // 2, HAUTEUR // 2
+    x, y = 100, HAUTEUR // 2
     dx, dy = 3, 5
     rayon = 20
     cercle = canvas.create_oval((x-rayon, y-rayon),
@@ -26,21 +25,11 @@ def creer_balle():
 
 def mouvement():
     """Déplace la balle et ré-appelle la fonction avec un compte-à-rebours"""
-    if compteur < 5:
+    if compteur < 30:
         rebond()
         canvas.move(balle[0], balle[1], balle[2])
+        canvas.move(trait,-1,0)
         canvas.after(20, mouvement)
-
-
-def change_forme(compteur):
-    if compteur % 5 == 0 and compteur != 0:
-        obj = canvas.type(balle[0])
-        coords = canvas.coords(balle[0])
-        canvas.delete(balle[0])
-        if obj == 'oval':
-            balle[0] = canvas.create_rectangle(coords[0],coords[1],coords[2],coords[3],fill='yellow')
-        elif obj == 'rectangle':
-            balle[0] = canvas.create_oval(coords[0],coords[1],coords[2],coords[3],fill='blue')
 
 
 def rebond():
@@ -50,11 +39,16 @@ def rebond():
     if x0 <= 0 or x1 >= 600:
         balle[1] = -balle[1]
         compteur += 1
-        change_forme(compteur)
     if y0 <= 0 or y1 >= 400:
         balle[2] = -balle[2]
         compteur += 1
-        change_forme(compteur)
+    coords_trait = canvas.coords(trait)
+    zone_trait = canvas.find_overlapping(coords_trait[0],coords_trait[1],coords_trait[2],coords_trait[3])
+    for obj in zone_trait:
+        if obj == balle[0]:
+            balle[1] = -balle[1]
+            canvas.move(trait,50,0)
+            compteur += 1
 
 
 ######################
@@ -64,6 +58,8 @@ def rebond():
 racine = tk.Tk()
 canvas = tk.Canvas(racine, bg="black", width=LARGEUR, height=HAUTEUR)
 canvas.grid()
+
+trait = canvas.create_line(LARGEUR/2,0,LARGEUR/2,HAUTEUR,fill='white')
 
 # initialisation de la balle
 balle = creer_balle()
