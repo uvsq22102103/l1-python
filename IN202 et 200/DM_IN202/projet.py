@@ -143,7 +143,7 @@ def check_corner():
 
 
 def check_line():
-    global mat,check,reading
+    global mat, check, reading
     if check:
         erreur = False
         if dir_frame == '':
@@ -152,7 +152,7 @@ def check_line():
         else:
             qr_frame = loading(dir_frame)
         print('QR Frame chargé')
-        for i in range(6,18):
+        for i in range(6, 18):
             if mat[6][i] != qr_frame[6][i]:
                 erreur = True
             if mat[i][6] != qr_frame[i][6]:
@@ -220,32 +220,32 @@ def sorting_qr():
                 liste_binaire[(zigzag*2)-1].append(mat[y][x])
         size -= 2
     for ligne in liste_binaire:
-        blocs.append(ligne[0:len(ligne)//2])
-        blocs.append(ligne[len(ligne)//2:len(ligne)])
+        if ligne[0:len(ligne)//2].count(1) != 14:
+            blocs.append(ligne[0:len(ligne)//2])
+        if ligne[len(ligne)//2:len(ligne)].count(1) != 14:
+            blocs.append(ligne[len(ligne)//2:len(ligne)])
     return blocs
 
 
 def blocs_to_hamming(blocs):
     output = []
     for bloc in blocs:
-        part1, part2 = str(), str()
-        for i in range(len(bloc)//2):
-            part1 += str(bloc[i])
-        for i in range(len(bloc)//2, len(bloc)):
-            part2 += str(bloc[i])
+        part1 = bloc[:7]
+        part2 = bloc[7:]
         part1, part2 = hamming(part1), hamming(part2)
         output.append(part1+part2)
+    print(output)
     return output
-        
+   
 
-def binary_to_ascii(binary: str):
-    '''Prend du binaire en argument (str) et retourne
+def bits_to_ascii(binary: list):
+    '''Prend du binaire en argument (list) et retourne
     le(s) character(s) ASCII utf-8 associé(s)'''
-    binary_int = int(binary, 2)
-    byte_number = binary_int.bit_length() + 7 // 8
-    binary_array = binary_int.to_bytes(byte_number, "big")
-    ascii_text = binary_array.decode()
-    return ascii_text
+    value = str()
+    for i in binary:
+        value += str(i)
+    value = chr(int(value, 2))
+    return value
 
 
 def check_filter():
@@ -256,7 +256,7 @@ def check_filter():
     \nSi "01" : damier dont la case en haut à gauche est noire.
     \nSi "10" des lignes horizontales alternées noires et blanches,
     la plus haute étant noire.
-    \nSi "11 des lignes verticales alternées noires et blanches, 
+    \nSi "11" des lignes verticales alternées noires et blanches, 
     la plus à gauche étant noire.'''
     global mat
     filtre = str(mat[23][8]) + str(mat[22][8])
@@ -283,7 +283,7 @@ def check_qr():
             # ASCII
             ascii_ = str()
             for bloc in blocs:
-                ascii_ += binary_to_ascii(bloc)
+                ascii_ += bits_to_ascii(bloc)
             print('Contenu du QR Code : ',ascii_)
         else:
             # Données numériques
