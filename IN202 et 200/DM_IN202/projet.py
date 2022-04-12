@@ -36,7 +36,7 @@ def loading(filename):
     dimension_qr = toLoad.size[1], toLoad.size[0]
     for i in range(dimension_qr[0]):
         for j in range(dimension_qr[1]):
-            mat[i][j] = 0 if toLoad.getpixel((j,i)) == 0 else 1
+            mat[i][j] = 0 if toLoad.getpixel((j, i)) == 0 else 1
     return mat
 
 
@@ -181,8 +181,7 @@ def switch_bin(binary: int):
 
 def hamming(bits):
     '''Prend 7 bits en entrée et rend 4 bits de données
-    (C'est un code de correction d'erreur de Hamming).
-    L'inverse est également possible !'''
+    (C'est un code de correction d'erreur de Hamming)'''
     c1, c2, c3 = parité(bits, [0, 1, 3]), parité(bits, [0, 2, 3]), parité(bits, [2, 1, 3])
     if c1 != bits[-3] and c2 != bits[-2] and c3 != bits[-1]:
         bits[3] = switch_bin(bits[3])
@@ -230,21 +229,21 @@ def sorting_qr():
 def blocs_to_hamming(blocs):
     output = []
     for bloc in blocs:
-        part1 = bloc[:7]
-        part2 = bloc[7:]
-        part1, part2 = hamming(part1), hamming(part2)
-        output.append(part1+part2)
-    print(output)
+        output.append(hamming(bloc[:7]) + hamming(bloc[7:]))
+    for i in output:
+        print(i)
     return output
    
 
 def bits_to_ascii(binary: list):
     '''Prend du binaire en argument (list) et retourne
-    le(s) character(s) ASCII utf-8 associé(s)'''
+    le character ASCII associé'''
     value = str()
     for i in binary:
         value += str(i)
+    print(value)
     value = chr(int(value, 2))
+    print(value)
     return value
 
 
@@ -281,10 +280,10 @@ def check_qr():
         blocs = blocs_to_hamming(blocs)
         if mat[24][8] == 1:
             # ASCII
-            ascii_ = str()
+            output = str()
             for bloc in blocs:
-                ascii_ += bits_to_ascii(bloc)
-            print('Contenu du QR Code : ',ascii_)
+                output += bits_to_ascii(bloc)
+            print('Contenu du QR Code : ', output)
         else:
             # Données numériques
             pass
